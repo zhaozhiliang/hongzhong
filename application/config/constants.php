@@ -1,6 +1,23 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+//域名
+define('DOMAIN_URL', "http://www.hongzhong.com");
+define('IMAGE_URL', "http://www.hongzhong.com/uploads");
+define('ADMIN_URL', "http://www.hongzhong.com/lmm7xyx");
+//图片上传路径
+define('UPLOAD_PATH', BASEPATH . '../uploads/');
+//sess配置没事别乱改，后果很严重
+
+//定义路径
+define('STYLE_CSS_PATH', DOMAIN_URL."/assets/css/");
+define('STYLE_JS_PATH', DOMAIN_URL."/assets/js/");
+define('STYLE_IMG_PATH', DOMAIN_URL."/assets/images/");
+define('STYLE_FONT_PATH', DOMAIN_URL."/assets/font/");
+
+
+
+
 /*
 |--------------------------------------------------------------------------
 | Display Debug backtrace
