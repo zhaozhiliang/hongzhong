@@ -1,0 +1,41 @@
+;(function(html,css,txt,position,color,url,online,viIden){
+if(!window.Youke)return;
+Youke.CssEx.add(css);
+Youke(html).appendTo(document.body);
+$container=Youke('.YoukeChat-Container').addClass(position+' '+color);
+$room=Youke('#YoukeChat-Room').hide();
+$roomframe=$room.find('iframe');
+if(Youke('.YoukeChat-MiddleLeft').length > 0){
+    $starter=Youke('#YoukeChat-Starter').css('left',0).show();
+}else if(Youke('.YoukeChat-MiddleRight').length > 0){
+    $starter=Youke('#YoukeChat-Starter').css('right',0).show();
+}else{
+    $starter=Youke('#YoukeChat-Starter').css('bottom',0).show();
+}
+$startertext=$starter.find('span:first-child').html(color == 'YoukeChat-Color-Diy' ? '' : txt);
+// Youke('.YoukeChat-Color-Diy').children().children().bind('click',function(e){
+//     Youke('.YoukeChat-Container').attr('class','YoukeChat-Container '+position+' YoukeChat-Color-Blue');
+//     Youke('#YoukeChat-Starter').css('padding','10px 15px 8px');
+//     $starter.find('span:first-child').html(txt);
+//     e.stopPropagation();
+// });
+if(!online)$startertext.addClass('YoukeChat-LeaveMessage');
+var isinit=false;
+var loadframe=function(){if(!isinit){$roomframe.attr('src',url);}};
+var slideshowhide=function(speed,el,sh,cb){if(!(typeof speed === 'number' || speed=='fast' ||speed=='slow')){cb=sh,sh=el,el=speed,speed='';}el=Youke(el);if(Youke.isFunction(sh)){cb=sh;sh=0;}sh=sh||'show';if(Youke('.YoukeChat-MiddleLeft').length > 0){var left=0;if(sh=='hide')left=-el.outerWidth();el.animate({left:left},speed,function(){cb&&cb();});}else if(Youke('.YoukeChat-MiddleRight').length > 0){var right=0;if(sh=='hide')right=-el.outerWidth();el.animate({right:right},speed,function(){cb&&cb();});}else{var bottom=0;if(sh=='hide')bottom=-el.outerHeight();el.animate({bottom:bottom},speed,function(){cb&&cb();});}};
+var openWNew=function(){var wWidth = 640;var wHeight = 490; var left = (window.screen.width - wWidth)/2; var top = (window.screen.height - wHeight)/2*0.8;if ( typeof( opwin ) == "undefined" )opwin = window.open( url, viIden, "scrollbars=no,menubar=no,resizable=no,location=no,width="+wWidth+",height="+wHeight+",status=0,top="+top+",left="+left+"" ) ;else if ( opwin.closed )opwin = window.open( url, viIden, "scrollbars=no,menubar=no,resizable=no,location=no,width="+wWidth+",height="+wHeight+",status=0,top="+top+",left="+left+"" ) ;if ( opwin )opwin.focus() ;window.parent && window.parent.postMessage && window.parent.postMessage('MSG-YoukeChat-Close','*');}
+var chatshow=function(){slideshowhide($room.show());slideshowhide($starter,'hide',function(){$starter.hide()});};
+var chathide=function(){slideshowhide($room,'hide',function(){$room.hide();slideshowhide('fast',$starter.show());});};
+var sendmessage=function(msg){$roomframe.length && $roomframe[0].contentWindow && $roomframe[0].contentWindow.postMessage && $roomframe[0].contentWindow.postMessage({msg:msg,color:color}, '*');};
+// 注释loadframe达到未点击聊天时不加载聊天相关组件；
+//loadframe();
+Youke(window).bind('message',function(e){var data=e.originalEvent.data;if('string'==typeof data){data={type:data};}if('object' == typeof data)switch(data.type){case 'MSG-YoukeChat-Close': chathide();break;}});
+$starter.bind('click',function(){openWNew();/*sendmessage('MSG-YoukeChat-Show');chatshow();*/});
+// $starter.bind('mouseenter',function(){
+//     if(color == 'YoukeChat-Color-Diy'){
+//         Youke('.YoukeChat-Container').attr('class','YoukeChat-Container '+position+' YoukeChat-Color-Diy');
+//         Youke('#YoukeChat-Starter').css('padding','0');
+//         $starter.find('span:first-child').html('');
+//     }
+// });
+})('<div class="YoukeChat-Container"><div id="YoukeChat-Room"><iframe src="" style="width:100%;height:100%;border:0;" frameborder="no" scrolling="no"></iframe></div><div id="YoukeChat-Starter"><span>在线咨询</span></div></div>','#YoukeChat-Starter{font-family: "Helvetica Neue", Helvetica, "Microsoft Yahei", Arial, sans-serif;font-size: 16px;line-height: 24px;position:fixed;right:100px;bottom:-100%;background:#15af8a;color:#fff;text-align:center;padding:10px 15px 8px;border-top-left-radius:5px;border-top-right-radius:5px;cursor:pointer;z-index:2147483645;}.YoukeChat-MiddleLeft #YoukeChat-Starter span{min-height:3px;height:auto;line-height:18px !important;width: 27px;letter-spacing:12px;word-wrap:break-word;padding:25px 4px 0 !important;}.YoukeChat-MiddleRight #YoukeChat-Starter span{min-height:3px;height:auto;line-height:18px !important;width: 27px;letter-spacing:12px;word-wrap:break-word;padding:25px 4px 0 !important;}#YoukeChat-Starter span{display:inline-block;height:24px;padding:0 0 0 34px;background:url("http://api.youkesdk.com/images/showchat_btn_icon_1.png") 0 0 no-repeat}#YoukeChat-Room{position:fixed;right:50px;bottom:-100%;width:320px;height:480px;z-index:2147483647; overflow:hidden;background: #fff;border:1px solid #15af8a;border-top-left-radius:5px;border-top-right-radius:5px;box-shadow:0 0 3px 2px rgba(135,135,135,0.1)}#YoukeChat-Starter,#YoukeChat-Room{_position:absolute;_bottom:auto;_top:expression(eval(document.documentElement.scrollTop+document.documentElement.clientHeight-this.offsetHeight-(parseInt(this.currentStyle.marginTop,10)||0)-(parseInt(this.currentStyle.marginBottom,10)||0)))}#YoukeChat-Starter span.YoukeChat-LeaveMessage{background-position:0 -27px;}.YoukeChat-Right #YoukeChat-Starter{left:auto;right:100px;}.YoukeChat-Right #YoukeChat-Room{left:auto;right:50px;}.YoukeChat-Left #YoukeChat-Starter{left:100px;right:auto;}.YoukeChat-Left #YoukeChat-Room{left:50px;right:auto;}.YoukeChat-MiddleLeft #YoukeChat-Starter{border-top-right-radius:5px;border-bottom-right-radius:5px;border-top-left-radius:0px;left:0px;right:auto;bottom:50%  !important;width:24px;}.YoukeChat-MiddleLeft #YoukeChat-Room{left:-100%;right:auto;bottom:20% !important}.YoukeChat-MiddleLeft #YoukeChat-Starter,#YoukeChat-Room{_position:absolute;_left:auto;_right:expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth-this.offsetWidth-(parseInt(this.currentStyle.marginRight,10)||0)-(parseInt(this.currentStyle.marginLeft,10)||0)))}.YoukeChat-MiddleRight #YoukeChat-Starter{border-top-left-radius:5px;border-bottom-left-radius:5px;border-top-right-radius:0px;left:auto;right:0px;bottom:50% !important;width:24px;}.YoukeChat-MiddleRight #YoukeChat-Room{right:-100%;left:auto;bottom:20% !important}.YoukeChat-MiddleLeft #YoukeChat-Starter,#YoukeChat-Room{_position:absolute;_right:auto;_left:expression(eval(document.documentElement.scrollLeft+document.documentElement.clientWidth-this.offsetWidth-(parseInt(this.currentStyle.marginLeft,10)||0)-(parseInt(this.currentStyle.marginRight,10)||0)))}.YoukeChat-Color-Blue #YoukeChat-Starter{background:#5082db;}.YoukeChat-Color-Gray #YoukeChat-Starter{background:#bdbdbd;}.YoukeChat-Color-Green #YoukeChat-Starter{background:#17bd36;}.YoukeChat-Color-Red #YoukeChat-Starter{background:#e51818;}.YoukeChat-Color-RoseRed #YoukeChat-Starter{background:#e260a0;}.YoukeChat-Color-Yellow #YoukeChat-Starter{background:#eb9317;}.YoukeChat-Color-Initial #YoukeChat-Starter{background:#15af8a;}.YoukeChat-Color-Diy #YoukeChat-Starter span{background:none;/*position: absolute;right: 2%;top: 3%;*/}.YoukeChat-Color-Diy #YoukeChat-Starter{background:url()  no-repeat; }.YoukeChat-Color-Blue #YoukeChat-Room{border-color:#5082db;}.YoukeChat-Color-Gray #YoukeChat-Room{border-color:#bdbdbd;}.YoukeChat-Color-Green #YoukeChat-Room{border-color:#17bd36;}.YoukeChat-Color-Red #YoukeChat-Room{border-color:#e51818;}.YoukeChat-Color-RoseRed #YoukeChat-Room{border-color:#e260a0;}.YoukeChat-Color-Yellow #YoukeChat-Room{border-color:#eb9317;}.YoukeChat-Color-Initial #YoukeChat-Room{border-color:#15af8a;}.YoukeChat-Color-Diy #YoukeChat-Room{border-color:#5082db;}','点击交谈','YoukeChat-Right','YoukeChat-Color-Blue','http://m.youkesdk.com/message.html?comId=9a3ed59b5bbb5377aff094f3f68057b5&clientType=web&viIden=cb215b949621a43b5f809aa149da45cc&color=Blue&refererUrl=http://www.jksoft.cn/index.php?a=about&dLang=c&robotType=s&robotMode=2|1&from=www.jksoft.cn&title='+encodeURIComponent(document.title),true,'cb215b949621a43b5f809aa149da45cc');
