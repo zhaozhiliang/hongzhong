@@ -30,21 +30,50 @@
         </table>
     </div>
 </div>
-<div region="west" border="true" split="true" title="我的工作台" style="width: 250px; padding: 5px;">
-    <ul class="easyui-tree">
-        <li iconcls="icon-base"><span>案例管理</span>
-            <ul>
-                <li iconcls="icon-gears"><a href="javascript:void(this)" onclick="open1('添加案例','teaching_mgr.html')">添加案例</a></li>
-                <li iconcls="icon-gears"><a href="#" onclick="open1('案例列表','<?php echo ADMIN_URL;?>/pcase/caseList')">案例列表</a></li>
+<div region="west" border="true" split="true" title="我的工作台" style="width: 250px;">
+
+
+
+    <div class="easyui-accordion">
+        <div title="工作管理" iconCls="icon-project" selected="true" style="overflow:auto;">
+            <ul class="easyui-tree">
+                <li iconcls="icon-base"><span>案例管理</span>
+                    <ul>
+                        <li iconcls="icon-gears"><a href="javascript:void(this)" onclick="open1('添加案例','teaching_mgr.html')">添加案例</a></li>
+                        <li iconcls="icon-gears"><a href="#" onclick="open1('案例列表','<?php echo ADMIN_URL;?>/pcase/caseList')">案例列表</a></li>
+                    </ul>
+                </li>
+                <li iconcls="icon-base"><span>留言管理</span>
+                    <ul>
+                        <li iconcls="icon-gears"><a href="#" onclick="open1('留言列表','@Url.Action("AppConfig","CustomNav")')">留言列表</a></li>
+                        <li iconcls="icon-gears"><a href="#" onclick="open1('未处理留言','@Url.Action("NavConfig","CustomNav")')">未处理留言</a></li>
+                    </ul>
+                </li>
             </ul>
-        </li>
-        <li iconcls="icon-base"><span>留言管理</span>
-            <ul>
-                <li iconcls="icon-gears"><a href="#" onclick="open1('留言列表','@Url.Action("AppConfig","CustomNav")')">留言列表</a></li>
-                <li iconcls="icon-gears"><a href="#" onclick="open1('未处理留言','@Url.Action("NavConfig","CustomNav")')">未处理留言</a></li>
+        </div>
+        <div title="系统管理" iconCls="icon-setting">
+            <ul id="tt1" class="easyui-tree">
+                <li>
+                    <span>Folder1</span>
+                    <ul>
+                        <li>
+                            <span>Sub Folder 1</span>
+                            <ul>
+                                <li><span>File 11</span></li>
+                                <li><span>File 12</span></li>
+                                <li><span>File 13</span></li>
+                            </ul>
+                        </li>
+                        <li><span>File 2</span></li>
+                        <li><span>File 3</span></li>
+                    </ul>
+                </li>
+                <li><span>File2</span></li>
             </ul>
-        </li>
-    </ul>
+        </div>
+    </div>
+        
+
 </div>
 <div region="center" border="true">
     <div id="tt" class="easyui-tabs" fit="true" border="false" plain="true">

@@ -19,35 +19,62 @@
         .toolbar-condition td{
             padding-right: 10px;
         }
+
+        /*以下我添加的*/
+
+        .infobox{
+
+        }
+        .infobox tr{
+            height: 24px;
+            line-height: 24px;
+        }
+
+        .infobox tr td,.infobox tr th{
+            padding-right: 5px;
+            padding-left: 5px;
+            position: relative;
+            border-top: none;
+            border-left: none;
+            border-bottom: 1px solid #AEC0C6;
+            border-right: 1px solid #AEC0C6;
+
+        }
     </style>
 </head>
 <body>
 
-<!--
-<table id="dg" class="easyui-datagrid"
-       data-options="
-        fit:true,
-        toolbar:'#tb',
-        url:'/CustomNav/GetPageByAppConfig',
-        rownumbers:true,
-        singleSelect:true,
-        autoRowHeight:false,
-        pagination:true,
-        fitColumns:true,
-        pageSize:20">
-    <thead>
-    <tr>
-        <th data-options="">用户编号</th>
-        <th data-options="">用户帐号</th>
-        <th data-options="">学生/回访/添加</th>
-        <th data-options="">课程名称</th>
-        <th data-options="">支付状态</th>
-        <th data-options="">咨询师</th>
-        <th data-options="">操作</th>
-    </tr>
-    </thead>
-</table>
--->
+<link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor/themes/default/default.css" />
+<link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.css" />
+<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/lang/zh-CN.js"></script>
+<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.js"></script>
+
+<script>
+
+    KindEditor.ready(function(K) {
+        var editor1 = K.create('textarea[name="detail22"]', {
+            cssPath : '<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.css',
+            uploadJson : '../php/upload_json.php',
+            fileManagerJson : '../php/file_manager_json.php',
+            allowFileManager : true,
+            afterCreate : function() {
+                var self = this;
+                K.ctrl(document, 13, function() {
+                    self.sync();
+                    K('form[name=example]')[0].submit();
+                });
+                K.ctrl(self.edit.doc, 13, function() {
+                    self.sync();
+                    K('form[name=example]')[0].submit();
+                });
+            }
+        });
+        prettyPrint();
+    });
+
+</script>
+
 
 <table id="dg" class="easyui-datagrid" title=""
        data-options="rownumbers:true,
@@ -71,8 +98,8 @@
 <div id="tb" style="padding:5px;height:auto">
     <div style="padding:10px 5px; color:#333; font-weight: bold;">案例管理 > 案例列表</div>
     <div style="margin-bottom:5px">
-        <!--<a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="newUser()">添加</a>-->
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true"
+           onclick="newPcase()">添加</a>
         <a href="<?php echo ADMIN_URL?>/pcase/add" class="easyui-linkbutton" iconCls="icon-add" plain="true"
           >添加</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
@@ -105,36 +132,15 @@
     </div>
 </div>
 
-<div id="dlg" class="easyui-dialog" title="&nbsp;添加"
-     data-options="iconCls:'icon-add',buttons:'#dlg-buttons',closed:true,modal:true"
-     style="width:400px; padding:10px 20px;">
-    <div class="dlg-info">应用配置</div>
-    <form id="fm" method="post" novalidate>
-        <input type="hidden" name="Id"/>
-        <input type="hidden" name="IsDelete" value="False"/>
+<!---添加对话框-->
+<div id="dlg"></div>
 
-        <div class="fitem">
-            <label>应用程序:</label>
-            <input name="App" class="easyui-validatebox" required="true">
-        </div>
-        <div class="fitem">
-            <label>平台ID:</label>
-            <input name="PlatformId" class="easyui-validatebox" required="true">
-        </div>
-        <div class="fitem">
-            <label>版本:</label>
-            <input name="Version" class="easyui-validatebox" required="true">
-        </div>
-    </form>
-</div>
-<div id="dlg-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="saveUser()">确定</a>
-    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="javascript:$('#dlg').dialog('close')">取消</a>
-</div>
+
 
 <script src="<?php echo STYLE_JS_PATH;?>/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
 <script src="<?php echo STYLE_JS_PATH;?>/easyui/1.3.2/jquery.easyui.min.js" type="text/javascript"></script>
 <script src="<?php echo STYLE_JS_PATH;?>/easyui/1.3.2/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+
 <script>
 
     //datagrid初始化
@@ -159,26 +165,43 @@
         frozenColumns:[[
             {field:'ck',checkbox:true}
         ]],
-//        toolbar: [{
-//            text: '添加',
-//            iconCls: 'icon-add',
-//            handler: function() {
-//                openDialog("add_dialog","add");
-//            }
-//        }, '-', {
-//            text: '修改',
-//            iconCls: 'icon-edit',
-//            handler: function() {
-//                openDialog("add_dialog","edit");
-//            }
-//        }, '-',{
-//            text: '删除',
-//            iconCls: 'icon-remove',
-//            handler: function(){
-//                delAppInfo();
-//            }
-//        }],
-        toolbar:'#tb'
+        toolbar: [{
+            text: '添加',
+            iconCls: 'icon-add',
+            handler: function() {
+                //openDialog("add_dialog","add");
+                $("#dlg").dialog({
+                    title:'新增项目',
+                    resizable:true,
+                    width:850,
+                    height:480,
+                    href:'<?php echo ADMIN_URL;?>/pcase/add',
+                    onOpen:function(){
+                     //   cancel['Project'] = $(this);
+                     //   cancel['ProjectName'] = $("#Project{$uniqid}");
+                    },
+                    onClose:function(){
+                        //$(this).dialog('destroy');
+                        //$("#Project{$uniqid}").datagrid('reload');
+                        cancel['Project'] = null;
+                        cancel['ProjectName'] = null;
+                    }
+                });
+            }
+        }, '-', {
+            text: '修改',
+            iconCls: 'icon-edit',
+            handler: function() {
+                openDialog("add_dialog","edit");
+            }
+        }, '-',{
+            text: '删除',
+            iconCls: 'icon-remove',
+            handler: function(){
+                delAppInfo();
+            }
+        }],
+        //toolbar:'#tb'
     });
     //设置分页控件
     var p = $('#dg').datagrid('getPager');
@@ -194,6 +217,8 @@
          $(this).pagination('loaded');
          }*/
     });
+
+    //添加案例
 </script>
 <script type="text/javascript">
     var url;
