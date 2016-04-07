@@ -44,39 +44,9 @@
 </head>
 <body>
 
-<link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor/themes/default/default.css" />
-<link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.css" />
-<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/kindeditor.js"></script>
-<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/lang/zh-CN.js"></script>
-<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.js"></script>
 
-<script>
-
-    KindEditor.ready(function(K) {
-        var editor1 = K.create('textarea[name="detail22"]', {
-            cssPath : '<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.css',
-            uploadJson : '../php/upload_json.php',
-            fileManagerJson : '../php/file_manager_json.php',
-            allowFileManager : true,
-            afterCreate : function() {
-                var self = this;
-                K.ctrl(document, 13, function() {
-                    self.sync();
-                    K('form[name=example]')[0].submit();
-                });
-                K.ctrl(self.edit.doc, 13, function() {
-                    self.sync();
-                    K('form[name=example]')[0].submit();
-                });
-            }
-        });
-        prettyPrint();
-    });
-
-</script>
-
-
-<table id="dg" class="easyui-datagrid" title=""
+<div height="100">
+<table id="dg"  class="easyui-datagrid" title=""
        data-options="rownumbers:true,
        singleSelect:true,
        url:'<?php echo ADMIN_URL;?>/pcase/ajaxGetList',
@@ -93,6 +63,8 @@
     </tr>
     </thead>
 </table>
+
+
 
 
 <div id="tb" style="padding:5px;height:auto">
@@ -132,6 +104,8 @@
     </div>
 </div>
 
+</div>
+
 <!---添加对话框-->
 <div id="dlg"></div>
 
@@ -140,6 +114,65 @@
 <script src="<?php echo STYLE_JS_PATH;?>/jquery/1.8.0/jquery.min.js" type="text/javascript"></script>
 <script src="<?php echo STYLE_JS_PATH;?>/easyui/1.3.2/jquery.easyui.min.js" type="text/javascript"></script>
 <script src="<?php echo STYLE_JS_PATH;?>/easyui/1.3.2/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
+
+
+<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/uploadify/jquery.uploadify.js"></script>
+<div class="file-box">
+    <div id="divPreview">
+        <span style="float:left">（最多可上传五张图片）</span>
+    </div>
+    <input type="file" name="file" class="file" id="fileField"  />
+    <input type="hidden" name="hash" id="hash" value="xoxo"/>
+</div>
+
+<script>
+    $(function() {
+        $("#fileField").uploadify({
+            'height'        : 30,
+            'swf'       : '<?php echo STYLE_JS_PATH;?>/uploadify/uploadify.swf?var='+(newDate()).getTime(),
+            'uploader'      :'index.php?r=upload/uploadimage',
+            'width'         : 120,
+            'onUploadSuccess' : function(file, data, response) {
+                var info = eval("("+data+")");
+                if(info.err==1){alert(info.msg);}                                       //如果图片过大或者格式错误弹出错误信息
+                else{
+                    $("#divPreview").append($("<img src='" + info.img + "'/>"));
+                    $("#divPreview").append($("<input type='hidden' name='imgId[]' value='" + info.imgId + "'/>"));
+                }
+            },
+            'buttonText'    : '浏览文件',
+            'uploadLimit'   : 5,                                                                      //上传最多图片张数
+            'removeTimeout' : 1,
+            'preventCaching': true,                                                           //不允许缓存
+            'fileSizeLimit' : 4100,                                                              //文件最大
+            'formData'      : { '<?php echosession_name();?>' : '<?php echosession_id();?>','hash':$("#hash").val() }           //hash
+        });
+        $("#SWFUpload_0").css({                  //设置按钮样式，根据插件文档进行修改
+            'position' :'absolute',
+            'top': 20,
+            'left': 35,
+            'z-index'  : 1
+        });
+    });
+</script>
+
+
+<link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor4110/themes/default/default.css" />
+<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor4110/kindeditor-min.js"></script>
+<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor4110/lang/zh_CN.js"></script>
+
+
+<script>
+    /*不写这段，初始化有问题*/
+    var editor;
+    KindEditor.ready(function(K) {
+        editor = K.create('textarea[name="xxx"]', {
+            allowFileManager : true
+        });
+    });
+
+</script>
+
 
 <script>
 
@@ -185,7 +218,23 @@
                         //$("#Project{$uniqid}").datagrid('reload');
                         cancel['Project'] = null;
                         cancel['ProjectName'] = null;
-                    }
+                    },
+                    onLoad:function() {
+                        alert('加载完成！');
+                        var editor;
+                        KindEditor.ready(function(K) {
+                            editor = K.create('textarea[name="detail"]', {
+                                allowFileManager : true,
+                                resizeType : 1,
+                                allowPreviewEmoticons : false,
+                                allowImageUpload : false,
+                                items : [
+                                    'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+                                    'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+                                    'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+                            });
+                        });
+                    },
                 });
             }
         }, '-', {

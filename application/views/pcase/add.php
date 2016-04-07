@@ -1,45 +1,4 @@
 
-<script>
-//    //加载插件
-//    easyloader.base = '../'; // 设置 easyui 的基本目录
-//    easyloader.load('messager', function(){ // 加载指定的模块
-//        $.messager.alert('messager', 'load ok');
-//    });
-//    easyloader.load('form', function(){ // 加载指定的模块
-//        $.messager.alert('form', 'load ok');
-//    });
-
-</script>
-
-
-<link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor/themes/default/default.css" />
-<link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.css" />
-<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/kindeditor.js"></script>
-<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/lang/zh-CN.js"></script>
-<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.js"></script>
-
-<script>
-    KindEditor.ready(function(K) {
-        var editor1 = K.create('textarea[name="detail22"]', {
-            cssPath : '<?php echo STYLE_JS_PATH;?>/kindeditor/plugins/code/prettify.css',
-            uploadJson : '../php/upload_json.php',
-            fileManagerJson : '../php/file_manager_json.php',
-            allowFileManager : true,
-            afterCreate : function() {
-                var self = this;
-                K.ctrl(document, 13, function() {
-                    self.sync();
-                    K('form[name=example]')[0].submit();
-                });
-                K.ctrl(self.edit.doc, 13, function() {
-                    self.sync();
-                    K('form[name=example]')[0].submit();
-                });
-            }
-        });
-        prettyPrint();
-    });
-</script>
 <div class="con-tb">
     <form class="projecr-form" id="" method="post">
         <table class="infobox" width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -76,7 +35,7 @@
             <tr>
                 <td width="13%"><label for="contents">案例详情</label></td>
                 <td colspan="3">
-                    <textarea name="detail22" id=""  rows="18" class="easyui-kindeditor" style="width:99%; height:295px" >{$info.baseinfo.content}</textarea>
+                    <textarea name="detail" id=""  rows="18" class="easyui-kindeditor" style="width:99%; height:295px" >{$info.baseinfo.content}</textarea>
                 </td>
             </tr>
             <tr>
