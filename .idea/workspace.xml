@@ -81,20 +81,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="b.jpg" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/uploads/b.jpg">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="g.jpg" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/uploads/g.jpg">
-          <provider selected="true" editor-type-id="images">
-            <state />
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="add.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/application/views/pcase/add.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -623,31 +609,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uploads/b.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uploads/g.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uploads/uploads/pcase_img/2016/05/03/1462247996915240.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uploads/uploads/pcase_img/2016/05/03/1462248064733554.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/uploads/uploads/pcase_img/2016/05/03/1462248081594192.jpg">
-      <provider selected="true" editor-type-id="images">
-        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/application/views/main/index.php">
