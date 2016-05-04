@@ -45,13 +45,8 @@
 <body>
 
 
-<div height="100">
-<table id="dg"  class="easyui-datagrid" title=""
-       data-options="rownumbers:true,
-       singleSelect:true,
-       url:'<?php echo ADMIN_URL;?>/pcase/ajaxGetList',
-       method:'get',
-       toolbar:'#tb'">
+
+<table id="dg" class="easyui-datagrid">
     <thead>
     <tr>
         <th data-options="field:'id',width:80">案例ID</th>
@@ -63,17 +58,11 @@
     </tr>
     </thead>
 </table>
-
-
-
-
 <div id="tb" style="padding:5px;height:auto">
-    <div style="padding:10px 5px; color:#333; font-weight: bold;">案例管理 > 案例列表</div>
+    <div style="padding:10px 5px; color:#333; font-weight: bold;">订单管理 > 订单管理</div>
     <div style="margin-bottom:5px">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-           onclick="newPcase()">添加</a>
-        <a href="<?php echo ADMIN_URL?>/pcase/add" class="easyui-linkbutton" iconCls="icon-add" plain="true"
-          >添加</a>
+           onclick="newUser()">添加</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true"
            onclick="editUser()">编辑</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true"
@@ -104,7 +93,6 @@
     </div>
 </div>
 
-</div>
 
 <!---添加对话框-->
 <div id="dlg"></div>
@@ -116,45 +104,114 @@
 <script src="<?php echo STYLE_JS_PATH;?>/easyui/1.3.2/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 
 
-<script charset="utf-8" src="<?php echo STYLE_JS_PATH;?>/uploadify/jquery.uploadify.js"></script>
-<div class="file-box">
-    <div id="divPreview">
-        <span style="float:left">（最多可上传五张图片）</span>
-    </div>
-    <input type="file" name="file" class="file" id="fileField"  />
-    <input type="hidden" name="hash" id="hash" value="xoxo"/>
+<!--
+<div id="filelist">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
+<br />
+<div id="container">
+    <a id="pickfiles" href="javascript:;">选择文件</a>
+    <a id="uploadfiles" href="javascript:;">上传</a>
 </div>
 
-<script>
-    $(function() {
-        $("#fileField").uploadify({
-            'height'        : 30,
-            'swf'       : '<?php echo STYLE_JS_PATH;?>/uploadify/uploadify.swf?var='+(newDate()).getTime(),
-            'uploader'      :'index.php?r=upload/uploadimage',
-            'width'         : 120,
-            'onUploadSuccess' : function(file, data, response) {
-                var info = eval("("+data+")");
-                if(info.err==1){alert(info.msg);}                                       //如果图片过大或者格式错误弹出错误信息
-                else{
-                    $("#divPreview").append($("<img src='" + info.img + "'/>"));
-                    $("#divPreview").append($("<input type='hidden' name='imgId[]' value='" + info.imgId + "'/>"));
-                }
+<br />
+<pre id="console"></pre>
+
+<script src="<?php echo STYLE_JS_PATH;?>/plupload/plupload.full.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    // Custom example logic
+
+    var uploader = new plupload.Uploader({
+        runtimes : 'html5,flash,silverlight,html4',
+        browse_button : 'pickfiles', // you can pass an id...
+        container: document.getElementById('container'), // ... or DOM Element itself
+        url : '<?php echo ADMIN_URL;?>/pcase/upload',
+        flash_swf_url : '<?php echo STYLE_JS_PATH;?>/plupload/Moxie.swf',
+        silverlight_xap_url : '<?php echo STYLE_JS_PATH;?>/plupload/Moxie.xap',
+
+        filters : {
+            max_file_size : '10mb',
+            mime_types: [
+                {title : "Image files", extensions : "jpg,gif,png"},
+                {title : "Zip files", extensions : "zip"}
+            ]
+        },
+
+        init: {
+            PostInit: function() {
+                document.getElementById('filelist').innerHTML = '';
+
+                document.getElementById('uploadfiles').onclick = function() {
+                    uploader.start();
+                    return false;
+                };
             },
-            'buttonText'    : '浏览文件',
-            'uploadLimit'   : 5,                                                                      //上传最多图片张数
-            'removeTimeout' : 1,
-            'preventCaching': true,                                                           //不允许缓存
-            'fileSizeLimit' : 4100,                                                              //文件最大
-            'formData'      : { '<?php echosession_name();?>' : '<?php echosession_id();?>','hash':$("#hash").val() }           //hash
-        });
-        $("#SWFUpload_0").css({                  //设置按钮样式，根据插件文档进行修改
-            'position' :'absolute',
-            'top': 20,
-            'left': 35,
-            'z-index'  : 1
-        });
+
+            FilesAdded: function(up, files) {
+                plupload.each(files, function(file) {
+                    //file文件属性：
+//                    id:文件编号,
+//                        loaded: 已经上传多少字节,
+//                        name: 文件名,
+//                        percent: 上传进度,
+//                        size: 文件大小,
+//                        status: 有四种状态 QUEUED, UPLOADING, FAILED, DONE.对应数值
+                    document.getElementById('filelist').innerHTML += '<div id="' + file.id + '"></div>';
+
+                    previewImage(file, function (imgsrc) {
+                        //alert($("#"+file.id).html());
+                        $("#"+file.id).attr("class","t-chuan t-zong");
+                        $("#"+file.id).html('<div style="float:left; margin-left:10px;border:1px solid #c9c9c9" ><img  height=\'120px\'  src="' + imgsrc + '" /></div>');
+                    })
+                });
+
+
+            },
+
+            UploadProgress: function(up, file) {
+                document.getElementById(file.id).getElementsByTagName('b')[0].innerHTML = '<span>' + file.percent + "%</span>";
+
+
+            },
+
+            Error: function(up, err) {
+                document.getElementById('console').appendChild(document.createTextNode("\nError #" + err.code + ": " + err.message));
+            },
+
+            UploadComplete: function(){
+
+            }
+        }
     });
+
+    uploader.init();
+
+    function previewImage(file, callback) {//file为plupload事件监听函数参数中的file对象,callback为预览图片准备完成的回调函数
+        if (!file || !/image\//.test(file.type)) return; //确保文件是图片
+        if (file.type == 'image/gif') {//gif使用FileReader进行预览,因为mOxie.Image只支持jpg和png
+            var fr = new mOxie.FileReader();
+            fr.onload = function () {
+                callback(fr.result);
+                fr.destroy();
+                fr = null;
+            }
+            fr.readAsDataURL(file.getSource());
+        } else {
+            var preloader = new mOxie.Image();
+            preloader.onload = function () {
+                preloader.downsize(300, 300);//先压缩一下要预览的图片,宽300，高300
+                var imgsrc = preloader.type == 'image/jpeg' ? preloader.getAsDataURL('image/jpeg', 80) : preloader.getAsDataURL(); //得到图片src,实质为一个base64编码的数据
+                callback && callback(imgsrc); //callback传入的参数为预览图片的url
+                preloader.destroy();
+                preloader = null;
+            };
+            preloader.load(file.getSource());
+        }
+    }
+
+
+
 </script>
+-->
+
 
 
 <link rel="stylesheet" href="<?php echo STYLE_JS_PATH;?>/kindeditor4110/themes/default/default.css" />
@@ -166,7 +223,7 @@
     /*不写这段，初始化有问题*/
     var editor;
     KindEditor.ready(function(K) {
-        editor = K.create('textarea[name="xxx"]', {
+        editor = K.create('textarea[name="content"]', {
             allowFileManager : true
         });
     });
@@ -181,7 +238,7 @@
         //title:'应用系统列表',
         iconCls:'icon-edit',//图标
         width: 700,
-        height: 'auto',
+        height: '800',
         nowrap: false,
         striped: true,
         border: true,
@@ -220,14 +277,16 @@
                         cancel['ProjectName'] = null;
                     },
                     onLoad:function() {
-                        alert('加载完成！');
+                        //alert('加载完成！');
                         var editor;
                         KindEditor.ready(function(K) {
-                            editor = K.create('textarea[name="detail"]', {
+                            editor = K.create('textarea[name="content"]', {
                                 allowFileManager : true,
                                 resizeType : 1,
                                 allowPreviewEmoticons : false,
                                 allowImageUpload : false,
+                                //下面这行代码就是关键的所在，当失去焦点时执行 this.sync();
+                                afterBlur: function(){this.sync();},
                                 items : [
                                     'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
                                     'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
@@ -271,24 +330,7 @@
 </script>
 <script type="text/javascript">
     var url;
-    function newUser() {
-        $('#dlg').dialog('open').dialog('setTitle', '添加');
-        $('#fm').form('clear');
-        url = '/CustomNav/CreateByAppConfig';
-    }
-    function editUser() {
-        var row = $('#dg').datagrid('getSelected');
-        if (row) {
-            $('#dlg').dialog('open').dialog('setTitle', '编辑');
-            $('#fm').form('load', row);
-            url = '/CustomNav/UpdateByAppConfig';
-        } else {
-            $.messager.show({
-                title: '提示信息',
-                msg: '没有选中的项！'
-            });
-        }
-    }
+
     function destroyUser() {
         var row = $('#dg').datagrid('getSelected');
         if (row) {

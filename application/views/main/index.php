@@ -17,7 +17,7 @@
                 <td style="height: 52px;">
                     <div style="color: #fff; font-size: 22px; font-weight: bold;">
                         <a href="#" style="color: #fff; font-size: 22px; font-weight: bold; text-decoration: none">
-                            鸿众科技管理后台</a>
+                            管理后台</a>
                     </div>
                     <div style="color: #fff">
                         <a href="#" style="color: #fff; text-decoration: none">业务系统 权限系统</a>

@@ -2,6 +2,7 @@
 class PcaseModel extends CI_Model{
 	//private $db=NULL;
 	private $t_pacse = "pcase";
+	private $t_pacse_img = "pcase_img";
 
 	public function __construct(){
 		parent::__construct();
@@ -15,9 +16,26 @@ class PcaseModel extends CI_Model{
 	 * 添加一条
 	 */
 	public function addOne($data = array()){
+        if(isset($data['slave_img'])){
+			$slave_img = $data['slave_img'];
 
+			unset($data['slave_img']);
+		}
 		$this->db->insert($this->t_pacse,$data);
 		$rule_id = $this->db->insert_id();
+
+		$img_arr = array();
+		if(!empty($slave_img) && is_array($slave_img)){
+			foreach($slave_img as $key=>$val){
+				$tmp = array();
+				$tmp['url'] = $val;
+				$tmp['pcase_id'] = $rule_id;
+				$img_arr[] = $tmp;
+			}
+		}
+		if(!empty($img_arr)){
+			$this->db->insert_batch($this->t_pacse_img,$img_arr);
+		}
 
 		if ($rule_id)
 		{
