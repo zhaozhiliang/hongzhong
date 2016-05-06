@@ -3,28 +3,34 @@
         <table class="infobox" width="100%" border="0" cellspacing="0" cellpadding="0">
             <tr>
                 <td width="13%"><label for="title">案例名称</label><input id="" type="hidden" value="" /></td>
-                <td><input name="title" type="text" class="easyui-validatebox" value="" style="width:30%;" data-options="required:true,validType:'ptext'" /></td>
+                <td><input name="title" type="text" class="easyui-validatebox" value="<?php if(isset($info['title'])){ echo $info['title'];}?>" style="width:30%;" data-options="required:true,validType:'ptext'" /></td>
             </tr>
             <tr>
                 <td width="13%"><label for="title">案例类型</label></td>
                 <td>
                     <select class="easyui-combobox" name="type" >
-                        <option value="0">PC网站</option>
-                        <option value="1">手机APP</option>
-                        <option value="2">微信公众号</option>
-                        <option value="3">WAP网站</option>
-                        <option value="4">其他</option>
+                        <option value="0" <?php if(isset($info['type']) && $info['type'] == 0 || !isset($info['type'])){ echo 'selected="selected"';}?> >PC网站</option>
+                        <option value="1" <?php if(isset($info['type']) && $info['type'] == 1){ echo 'selected="selected"';}?> >手机APP</option>
+                        <option value="2" <?php if(isset($info['type']) && $info['type'] == 2){ echo 'selected="selected"';}?> >微信公众号</option>
+                        <option value="3" <?php if(isset($info['type']) && $info['type'] == 3){ echo 'selected="selected"';}?> >WAP网站</option>
+                        <option value="4" <?php if(isset($info['type']) && $info['type'] == 4){ echo 'selected="selected"';}?> >其他</option>
                     </select>
                 </td>
             </tr>
             <tr>
                 <td width="13%"><label for="startdate">案例主图</label></td>
                 <td >
+                    <div id="has_master" style="<?php if(isset($info['master_img']) && !empty($info['master_img'])){ echo 'display:block;';}else{ echo 'display:none;';} ?>">
+                        <div style="position:relative;float:left;margin:5px 0px 10px 10px;">
+                        <img  width="120px" style="border: 3px solid #c4c4c4;" src="<?php if(isset($info['master_img']) && !empty($info['master_img'])){ echo IMAGE_URL.$info['master_img'];}?>"/>
+                        <div id="del_has_master_img"  style="width:32px;height:32px;position: absolute;top:8px;right:8px;z-index:99;background: url('/assets/admin/images/del_32.png') ;" ></div>
+                        </div>
+                    </div>
                     <div id="filelist_master" style="height: auto;">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
                     <br />
                     <div id="container_master" style="clear:both; margin: 20px 0px 0px 12px;">
                         <!--<a id="pickfiles" href="javascript:;">选择文件</a>-->
-                        <a id="pickfiles_master" href="javascript:;" class="easyui-linkbutton">选择文件</a>
+                        <a style="<?php if(isset($info['master_img']) && !empty($info['master_img'])){ echo 'display:none;';}else{ echo 'display:block;';} ?>" id="pickfiles_master" href="javascript:;" class="easyui-linkbutton">选择文件</a>
                         <span style="color:red">只能上传一张！</span>
                         <!--<a id="uploadfiles_master" href="javascript:;" class="easyui-linkbutton" style="margin-left: 20px;">上传</a>-->
                     </div>
@@ -36,6 +42,17 @@
             <tr>
                 <td width="13%"><label for="startdate">案例展示图</label></td>
                 <td>
+                    <div id="has_slave" style="<?php if(isset($imglist) && !empty($imglist)){ echo 'display:block;';}else{ echo 'display:none;';}?>">
+                        <?php if(isset($imglist) && !empty($imglist)){
+                            foreach($imglist as $key=>$val){
+                                ?>
+                            <div style="position:relative;float:left;margin:5px 0px 10px 10px;">
+                                <img width="120px"  style="border: 3px solid #c4c4c4;" src="<?php echo IMAGE_URL.$val['url'];?>" />
+                                <div class="has_img_js" data-val= "<?php echo $val['id'];?>" style="width:32px;height:32px;position: absolute;top:8px;right:8px;z-index:99;background: url('/assets/admin/images/del_32.png') ;" ></div>
+                            </div>
+                            <?php }} ?>
+                    </div>
+
                     <div id="filelist" style="height: auto;">Your browser doesn't have Flash, Silverlight or HTML5 support.</div>
                     <br />
                     <div id="container" style="clear:both; margin: 20px 0px 0px 12px;">
@@ -53,13 +70,13 @@
             <tr>
                 <td width="13%"><label for="client_id">案例简介</label></td>
                 <td>
-                    <textarea name="profile" id="profile"  rows="3"  style="width:99%;" class="easyui-validatebox"  data-options="required:true,validType:'ptext'"></textarea>
+                    <textarea name="profile" id="profile"  rows="3"  style="width:99%;" class="easyui-validatebox"  data-options="required:true,validType:'ptext'"><?php if(isset($info['profile'])){ echo $info['profile'];}?></textarea>
                 </td>
             </tr>
             <tr>
                 <td width="13%"><label for="contents">案例详情</label></td>
                 <td>
-                    <textarea name="content" id="content"  rows="18" class="easyui-kindeditor" style="width:99%; height:295px" ></textarea>
+                    <textarea name="content" id="content"  rows="18" class="easyui-kindeditor" style="width:99%; height:295px" ><?php if(isset($info['content'])){ echo $info['content'];}?></textarea>
                 </td>
             </tr>
             <tr>
@@ -70,8 +87,13 @@
             </tr>
             <tr>
                 <td colspan="2">
+                    <?php if(isset($info['id'])){?>
+                        <input type="hidden" name="id" value="<?php echo $info['id']; ?>" />
+                    <?php }?>
                     <div id="master_img_input"></div>
                     <div id="slave_img_input"></div>
+                    <div id="del_img_input"></div>
+
                 </td>
             </tr>
 
@@ -111,10 +133,10 @@
             PostInit: function() {
                 document.getElementById('filelist_master').innerHTML = '';
 
-                document.getElementById('uploadfiles_master').onclick = function() {
-                    uploader.start();
-                    return false;
-                };
+//                document.getElementById('uploadfiles_master').onclick = function() {
+//                    uploader.start();
+//                    return false;
+//                };
             },
 
             FilesAdded: function(up, files) {
@@ -129,7 +151,7 @@
 //                        status: 有四种状态 QUEUED, UPLOADING, FAILED, DONE.对应数值
                     var children = $("#filelist_master > div");
                     if(children.length <1){
-                        document.getElementById('filelist_master').innerHTML += '<div id="' + file.id + '_master" style="float:left; margin-left:10px;position: relative;height:126px;margin-bottom: 10px;"></div>';
+                        document.getElementById('filelist_master').innerHTML += '<div id="' + file.id + '_master" style="float:left;position: relative;height:126px;margin:5px 0px 10px 10px;"></div>';
 
                         previewImage(file, function (imgsrc) {
                             //alert($("#"+file.id).html());
@@ -224,10 +246,10 @@
             PostInit: function() {
                 document.getElementById('filelist').innerHTML = '';
 
-                document.getElementById('uploadfiles').onclick = function() {
-                    uploader.start();
-                    return false;
-                };
+//                document.getElementById('uploadfiles').onclick = function() {
+//                    uploader.start();
+//                    return false;
+//                };
             },
 
             FilesAdded: function(up, files) {
@@ -244,7 +266,7 @@
                     previewImage(file, function (imgsrc) {
                         //alert($("#"+file.id).html());
                         $("#"+file.id).attr("class","t-chuan t-zong");
-                        var html = '<div id="each_'+file.id+'" style="float:left; margin-left:10px;position: relative;height:126px;margin-bottom: 10px;" ><img  style="border: 3px solid #a4e9c1 " height=\'120px\'  src="' + imgsrc
+                        var html = '<div id="each_'+file.id+'" style="float:left;position: relative;height:126px;margin:5px 0px 10px 10px;"" ><img  style="border: 3px solid #a4e9c1 " height=\'120px\'  src="' + imgsrc
                             + '" /><b></b><div class="del_img_js" data-val="'+file.id+'"  style="width:32px;height:32px;position: absolute;top:8px;right:8px;z-index:99;background-color:green;background: url(\'/assets/admin/images/del_32.png\') ;" ></div></div>';
 
                         $("#"+file.id).html(html);
@@ -327,6 +349,10 @@
 
 
     function onSubmitProject(){
+
+        var add_update_sign = "<?php if(isset($info)){ echo 'update';}else{ echo 'add';}?>";
+
+
 		//验证参数的合法性
 		var isValid = $("#projecr-form").form('validate');  //验证参数的合法性
         if (!isValid){
@@ -337,18 +363,34 @@
 		//验证图片必须上传一张
 		var master_img = $("#filelist_master > div");
 		var slave_img = $("#filelist > div");
-		if(master_img.length <=0){
+		if(add_update_sign == 'add' && master_img.length <=0){
 			//alert("请上传主图");
             $.messager.alert('提示','请上传主图！','warning');
 			isValid = false;
             return ;
 		}
-		if(slave_img.length <=0){
+		if(add_update_sign == 'add' && slave_img.length <=0){
 			//alert("请至少上传一张展示图！");
             $.messager.alert('提示','请至少上传一张展示图！','warning');
 			isValid = false;
             return ;
 		}
+
+        if(add_update_sign == 'update'){ //
+            var has_master_img = $("#has_master > div");
+            var has_slave_img = $("#has_slave > div");
+            if(master_img.length <=0 && has_master_img.length <=0){
+                $.messager.alert('提示','请上传主图！','warning');
+                isValid = false;
+                return ;
+            }
+            if(slave_img.length <=0 && has_slave_img.length <=0){
+                //alert("请至少上传一张展示图！");
+                $.messager.alert('提示','请至少上传一张展示图！','warning');
+                isValid = false;
+                return ;
+            }
+        }
 		
 		if (!isValid){
 			$.messager.progress('close');
@@ -361,15 +403,24 @@
         uploader_master.start();
 //        alert($res);
         //提交表单
-        commitForm();
+        commitForm(add_update_sign);
     }
 
     //条件满足时，执行提交
-    function commitForm()
+    function commitForm(add_update_sign)
     {
+        if(add_update_sign == 'add'){
+            var url = '<?php echo ADMIN_URL;?>/pcase/doAdd';
+            var notice_ok = '新增数据成功!';
+            var notice_no = '新增数据失败!';
+        }else{
+            url = '<?php echo ADMIN_URL;?>/pcase/doUpdate';
+            notice_ok = '修改数据成功!';
+            notice_no = '修改数据失败!';
+        }
         if(IS_UPLOAD_COMPLETE[0] && IS_UPLOAD_COMPLETE[1]){
                 $("#projecr-form").form('submit',{
-                    url:'<?php echo ADMIN_URL;?>/pcase/doAdd',
+                    url:url,
                     onSubmit: function(){
                         var isValid = $(this).form('validate');  //验证参数的合法性
                         if (!isValid){
@@ -381,19 +432,19 @@
                         var jsonstr = eval("(" + data + ")");
                         $.messager.progress('close');
                         if(jsonstr.status == 1){
-                            $.messager.alert('提示','新增数据成功！','info',function(){
+                            $.messager.alert('提示',notice_ok,'info',function(){
                                 //关闭添加框
                                 $('#dlg').dialog('close');
                                 $('#dg').datagrid('reload');
                             });
                         }else{
-                            $.messager.alert('提示','新增数据失败！','warning');
+                            $.messager.alert('提示',notice_no,'warning');
                         }
                     }
                 });
 
         }else{
-            setTimeout("commitForm()", 100);
+            setTimeout("commitForm(add_update_sign)", 100);
         }
     }
 
@@ -402,6 +453,18 @@
         $('#dlg').dialog('close');
     }
 
+    $(".has_img_js").click(function(){
+        var del_id = $(this).attr('data-val');
+        $("#del_img_input").append('<input type="hidden" name="del_img[]" value="'+del_id+'"/>');
+        $(this).parent().remove();
+
+    });
+
+
+    $("#del_has_master_img").click(function(){
+        $(this).parent().remove();
+        $("#pickfiles_master").show();
+    });
 
 </script>
 

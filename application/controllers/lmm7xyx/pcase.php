@@ -1,13 +1,35 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Pcase extends CI_Controller {
-	private $_numOfPage = 5;
+	private $_numOfPage = 10;
 	
 	private $_defaultUrl = array();
 	
 	public function __construct(){
 		parent::__construct();
 		//$this->load->Model('UserModel');
+		$this->load->helper('url');
 		$this->load->Model('/admin/PcaseModel');
+	}
+
+	/**
+	 * 修改
+	 */
+	public function update($id=0){
+		if($id <1){
+			redirect(ADMIN_URL.'/pcase/caseList');
+		}
+		$data = array();
+
+		$res = $this->PcaseModel->getPcaseById($id);
+		$res_img = $this->PcaseModel->getPcaseImgByPcaseId($id);
+		if(empty($res)){
+			redirect(ADMIN_URL.'/pcase/caseList');
+		}
+		$data['info'] = $res;
+		$data['imglist'] = !empty($res_img) ? $res_img : array();
+
+
+		$this->load->view('/pcase/add',$data);
 	}
 
 	/**
@@ -45,6 +67,7 @@ class Pcase extends CI_Controller {
 		$this->form_validation->set_rules('profile', '简介', 'required');
 		$this->form_validation->set_rules('content', '详情', 'required');
 		$this->form_validation->set_rules('master_img', '主图', 'required');
+		$this->form_validation->set_rules('type', '类型', 'required');
 
 
 		if ($this->form_validation->run())
@@ -55,6 +78,7 @@ class Pcase extends CI_Controller {
 			$info['content'] = $this->input->post('content',TRUE);
 			$info['master_img'] = $this->input->post('master_img',TRUE);
 			$info['slave_img'] = $this->input->post('slave_img',TRUE);
+			$info['type'] = $this->input->post('type',TRUE);
 			//$info['code'] = $this->input->post('code',TRUE);
 			$info['ctime'] = date('Y-m-d H:i:s',time());
 
@@ -80,6 +104,73 @@ class Pcase extends CI_Controller {
 
 	}
 
+	/**
+	 * 修改后提交
+	 */
+	public function doUpdate(){
+		$this->load->library('form_validation');
+
+		$this->form_validation->set_rules('title', '标题', 'required');
+		$this->form_validation->set_rules('profile', '简介', 'required');
+		$this->form_validation->set_rules('content', '详情', 'required');
+		$this->form_validation->set_rules('type', '类型', 'required');
+		//$this->form_validation->set_rules('master_img', '主图', 'required');
+
+
+		if ($this->form_validation->run())
+		{
+			$info = array();
+			$info['title'] = $this->input->post('title',TRUE);
+			$info['profile'] = $this->input->post('profile',TRUE);
+			$info['content'] = $this->input->post('content',TRUE);
+
+			$info['slave_img'] = $this->input->post('slave_img',TRUE);
+			$info['type'] = $this->input->post('type',TRUE);
+			//$info['code'] = $this->input->post('code',TRUE);
+			$info['ctime'] = date('Y-m-d H:i:s',time());
+
+			if(isset($_POST['master_img'])){
+				$info['master_img'] = $this->input->post('master_img',TRUE);
+			}
+
+			$info['del_img'] = $this->input->post('del_img',TRUE);
+
+			$id = $this->input->post('id',TRUE);
+
+			$res = $this->PcaseModel->updateById($id,$info);
+
+			//$res = true;
+
+			if($res){
+				echo json_encode(array('status'=>1,'msg'=>'成功'));die;
+			}else{
+				echo json_encode(array('status'=>-2,'msg'=>'失败'));die;
+			}
+		}
+		else
+		{
+			echo json_encode(array('status'=>-1,'msg'=>'参数错误'));die;
+		}
+
+
+	}
+
+	/**
+	 * 删除
+	 */
+	public function ajaxDel($id){
+		if($id <1){
+			echo 0;
+		}
+		$res = $this->PcaseModel->delPcaseById($id);
+		if($res){
+			echo 1;
+		}else{
+			echo 0;
+		}
+
+	}
+
 	public function caseList(){
 		$data = array();
 		$this->load->view('/pcase/list',$data);
@@ -87,8 +178,8 @@ class Pcase extends CI_Controller {
 
 	public function ajaxGetList(){
 		$data = array();
-		$page = (int)$this->input->get('page',TRUE);
-		$rows = (int)$this->input->get('rows',TRUE);
+		$page = (int)$this->input->post('page',TRUE);
+		$rows = (int)$this->input->post('rows',TRUE);
 		$limit = !empty($rows)? $rows : $this->_numOfPage;
 		$page = !empty($page) ? $page : 1;
 		$offset = ($page-1)*$limit;
@@ -97,6 +188,7 @@ class Pcase extends CI_Controller {
 
 		$where = array();
 		$res = $this->PcaseModel->getPcaseList($where,$limit,$offset);
+		//var_dump($res);
 		if(!empty($res['list']) && is_array($res['list'])){
 			$list = array();
 			foreach($res['list'] as $key=>&$val){
@@ -104,6 +196,7 @@ class Pcase extends CI_Controller {
 				$tmp['id'] = $val['id'];
 				$tmp['title'] = $val['title'];
 				$tmp['content'] = $val['content'];
+				$tmp['profile'] = $val['profile'];
 				$tmp['ctime'] = $val['ctime'];
 				$tmp['master_img'] = '<img src="'.IMAGE_URL.'/'.$val['master_img'].'" width="100" />';
 				$tmp['status'] = $val['status'];
@@ -126,6 +219,7 @@ class Pcase extends CI_Controller {
 	 * 上传
 	 */
 	public function upload(){
+
 		if(isset($_FILES['file']) && !empty($_FILES['file']['tmp_name']))
 		{
 			$config = array();

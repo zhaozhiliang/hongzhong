@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 //域名
 define('DOMAIN_URL', "http://www.hongzhong.com");
-define('IMAGE_URL', "http://www.hongzhong.com/uploads");
+define('IMAGE_URL', "http://www.hongzhong.com/uploads/");
 define('ADMIN_URL', "http://www.hongzhong.com/lmm7xyx");
 //图片上传路径
 define('UPLOAD_PATH', BASEPATH . '../uploads/');
