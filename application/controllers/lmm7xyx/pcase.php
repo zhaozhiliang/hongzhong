@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Pcase extends CI_Controller {
+class Pcase extends Needlogin_Controller {
 	private $_numOfPage = 10;
 	
 	private $_defaultUrl = array();

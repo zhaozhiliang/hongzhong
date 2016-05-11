@@ -19,5 +19,28 @@ class AdminModel extends CI_Model{
         return $query->row_array();
     }
 
+    public function getAdminList($where = array(),$limit=0,$offset=0){
+
+        if (!empty($where)){
+            $whereStr = ' where 1=1 ';
+
+            if (isset($where['id']) && !empty($where['id'])) {
+                $whereStr .= " and id = '" . $where['id'] . "'";
+            }
+        }else{
+            $whereStr = '';
+        }
+
+        $result = array();
+        $sql = "SELECT * FROM {$this->t_admin} {$whereStr}  LIMIT {$offset}, {$limit}";
+        $query = $this->db->query($sql);
+        $result['list'] = $query->result_array();
+        $cntSql = "SELECT COUNT(*) AS cnt FROM {$this->t_admin} {$whereStr}";
+        $cntQuery = $this->db->query($cntSql);
+        $cntRow = $cntQuery->row_array();
+        $result['total'] = $cntRow['cnt'];
+        return $result;
+    }
+
 
 }

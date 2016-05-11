@@ -19,8 +19,12 @@
                         <a href="#" style="color: #fff; font-size: 22px; font-weight: bold; text-decoration: none">
                             管理后台</a>
                     </div>
-                    <div style="color: #fff">
+                    <div style="color: #fff;float:left">
                         <a href="#" style="color: #fff; text-decoration: none">业务系统 权限系统</a>
+                    </div>
+                    <div style="color:#fff;float:right;">
+                        欢迎：<b width="100"><?php if(isset($sess['realname'])){ echo $sess['realname'];}?></b>
+                        <span>【<a href="<?php echo ADMIN_URL.'/main/logout'?>" style="color: #fff; font-size: 16px; font-weight: bold; text-decoration: none">退出</a>】</span>
                     </div>
                 </td>
                 <td style="padding-right: 5px; text-align: right; vertical-align: bottom;">
@@ -55,12 +59,12 @@
                 <li>
                     <span>权限管理</span>
                     <ul>
-                        <li><a href="#" onclick="open1('管理员列表','<?php echo ADMIN_URL;?>/pcase/caseList')">管理员列表</a></li>
+                        <li><a href="#" onclick="open1('管理员列表','<?php echo ADMIN_URL;?>/admin/adminList')">管理员列表</a></li>
                         <li><span>角色列表</span></li>
                         <li><span>权限列表</span></li>
                     </ul>
                 </li>
-                <li><span>File2</span></li>
+                <li><span>网站管理</span></li>
             </ul>
         </div>
     </div>

@@ -15,7 +15,7 @@ class Needlogin_Controller extends CI_Controller{
 
 		//验证是否登录
 		$this->load->library('login');	// 加载参数验证类库
-		//$this->load->helper('common');	// 加载公共辅助函数
+		$this->load->helper('url');	// 加载公共辅助函数
 
 		// 验证请求的签名
 		$res = $this->login->is_logged_in();

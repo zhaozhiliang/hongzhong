@@ -83,7 +83,17 @@ class Login extends CI_Controller {
 
             if(!empty($res['passwd']) && $res['passwd'] == md5($passwd.$res['salt'].'hongzhong')){//登录成功！
                 //设置session
-                //echo json_encode(array('status'=>1,'msg'=>'登录成功'));die;
+                $this->load->library('session');
+                $newdata = array(
+                    'realname'  => $res['realname'],
+                    'phone'     => $res['phone'],
+                    'nickname' => $res['nickname'],
+                    'uid'=>$res['id']
+                );
+
+                $this->session->set_userdata($newdata);
+
+
                 $this->load->view('success',array(
                     'jumpUrl'=>ADMIN_URL.'/main/index',
                     'message'=>'登录成功！',

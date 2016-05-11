@@ -1,5 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Main extends CI_Controller {
+class Main extends Needlogin_Controller{
 	
 	private $_defaultUrl = array();
 	
@@ -46,7 +46,18 @@ class Main extends CI_Controller {
             'topMenu' => $topMenu,
             'leftMenu' => $leftMenu
         );
+
+		$sess = $this->session->all_userdata();
+		$data['sess'] = $sess;
 		$this->load->view('/main/index',$data);
+	}
+
+	/**
+	 * 退出登录
+	 */
+	public function logout(){
+		session_destroy();
+		redirect(ADMIN_URL.'/login/login');
 	}
 
 
