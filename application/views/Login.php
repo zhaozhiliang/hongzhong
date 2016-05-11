@@ -26,7 +26,7 @@
                 <?php
   if(1){
  ?>
-                <div class="text" style="margin-top:14px; margin-top:12px;\9;"><span>验证码：</span><input name="code" type="text" class="code" maxlength="" AUTOCOMPLETE="off" /> <img style="cursor:pointer" src='' height="23" onclick="newCode(this,this.src)" title="点击刷新" /></div>
+                <div class="text" style="margin-top:14px; margin-top:12px;\9;"><span>验证码：</span><input name="code" type="text" class="code" maxlength="4" AUTOCOMPLETE="off" /> <img style="cursor:pointer" src='<?php echo ADMIN_URL.'/Login/vcode?'?>' height="23" onclick="newCode(this,this.src)" title="点击刷新" /></div>
                 <?php
   }
  ?>

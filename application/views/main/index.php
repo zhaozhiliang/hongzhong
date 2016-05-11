@@ -39,7 +39,6 @@
             <ul class="easyui-tree">
                 <li iconcls="icon-base"><span>案例管理</span>
                     <ul>
-                        <li iconcls="icon-gears"><a href="javascript:void(this)" onclick="open1('添加案例','teaching_mgr.html')">添加案例</a></li>
                         <li iconcls="icon-gears"><a href="#" onclick="open1('案例列表','<?php echo ADMIN_URL;?>/pcase/caseList')">案例列表</a></li>
                     </ul>
                 </li>
@@ -54,18 +53,11 @@
         <div title="系统管理" iconCls="icon-setting">
             <ul id="tt1" class="easyui-tree">
                 <li>
-                    <span>Folder1</span>
+                    <span>权限管理</span>
                     <ul>
-                        <li>
-                            <span>Sub Folder 1</span>
-                            <ul>
-                                <li><span>File 11</span></li>
-                                <li><span>File 12</span></li>
-                                <li><span>File 13</span></li>
-                            </ul>
-                        </li>
-                        <li><span>File 2</span></li>
-                        <li><span>File 3</span></li>
+                        <li><a href="#" onclick="open1('管理员列表','<?php echo ADMIN_URL;?>/pcase/caseList')">管理员列表</a></li>
+                        <li><span>角色列表</span></li>
+                        <li><span>权限列表</span></li>
                     </ul>
                 </li>
                 <li><span>File2</span></li>
