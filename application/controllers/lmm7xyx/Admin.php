@@ -47,6 +47,7 @@ class Admin extends Needlogin_Controller {
                 $tmp['nickname'] = $val['nickname'];
                 $tmp['phone'] = $val['phone'];
                 $tmp['create_time'] = $val['create_time'];
+                $tmp['last_time'] = $val['last_time'];
                 $tmp['status'] = $val['status'];
                 if($val['status'] == 0){
                     $tmp['status_cn'] = '正常';
